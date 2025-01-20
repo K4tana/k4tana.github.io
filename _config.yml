@@ -1,4 +1,4 @@
-title: "K4tana - Cutting edge Blogs"
+title: "K4tana - Cutting Edge Research Blogs"
 author: "Oliver D. Reithmaier"
 description: "The k4tana blog is the digital home of Oliver D. Reithmaier. I blog about Usable Security and Privacy Issues, Politics and Statistics or Data Science" # This will show up in places like twitter, linkedin, etc, if you share your sites url as a post.
 
@@ -14,7 +14,9 @@ description: "The k4tana blog is the digital home of Oliver D. Reithmaier. I blo
 #pinterest_username: username
 #youtube_username: username
 #googleplus_username: +username
-
+mastodon:
+- username: odr_k4tana
+  instance: infosec.exchange
 #########################################################################################
 ######### Nothing below needs to be changed (unless you know what you're doing) #########
 #########################################################################################
