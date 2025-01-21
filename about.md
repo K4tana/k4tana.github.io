@@ -1,12 +1,16 @@
+---
+layout: page
+title: About
+---
 # About Me
 
 I'm Oliver D. Reithmaier, a half-brit German scientist in the usable security field. I speak English, German, (bad) Japanese and can read Dutch (dont test me to speak it, please). 
 
 Here's some quick facts about myself:
+
 - Bachelor's in Psychology (LMU Munich)
 - Master's in Social/IO Psychology (LMU Munich)
 - Currently PhD Candidate at the Usable Security & Privacy Group at Leibniz University Hannover (Germany)
-
 
 My work focuses much around phishing emails, research methods and cybersecurity science concepts that stem from psychology (e.g. self-efficacy). Current research projects include: 
 
