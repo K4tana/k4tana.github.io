@@ -1,1 +1,5 @@
-### Learning shiny with AI. The hard way. 
+---
+published: false
+---
+
+## Learning shiny with AI. The hard way. 

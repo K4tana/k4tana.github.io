@@ -1,3 +1,7 @@
+---
+published: false
+---
+
 ## Phishing research is dead. Long live Phishing Research
 ### Phishing research is a problem.
 
