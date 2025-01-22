@@ -22,9 +22,9 @@ I gave this to ChatGPT (4.0) and let it construct the app and the template for t
 
 It was at this moment that I decided to learn Shiny through a different approach. Take the (obvious) garbage that ChatGPT gave me and refactor it. While doing so, learn about the framework. For this, I consulted the book *Mastering Shiny* by Hadley Wickham, while working through the code elements. I learnt how to construct the UI, what reactivity is etc. all while refactoring the app's code as well as the report-PDF's inner workings. 
 
-This took me about a week, but in the end, I was able to get the report and the download to work and got rid of redundancies in the code, as well as tweaking some UI elements and plotting options, all while learning how shiny things work. The end result of this is the **ShinyExams App**, which you can test locally after downloading the thing yourself. Granted, it is far from what it could be, but the core functions are solid, the interface works and it has potential for scalable improvement. 
+This took me about a week, but in the end, I was able to get the report and the download to work and got rid of redundancies in the code, as well as tweaking some UI elements and plotting options, all while learning how shiny things work. The end result of this is the **ShinyExams App** (linked below), which you can test locally after downloading the thing yourself. Granted, it is far from what it could be, but the core functions are solid, the interface works and it has potential for scalable improvement. 
 
-### The verdict
+### The Verdict
 
 **Is this approach suited for me?** 
 That really depends: Are you really comfortable with R and programming anything else than statistics scripts? Then yes, definitely. Are you the type that likes to learn on the job, so to speak? Even better, this approach will work for you. 
