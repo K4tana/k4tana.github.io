@@ -6,7 +6,7 @@ I'm Oliver D. Reithmaier, a half-brit German scientist in the usable security fi
 
 ### Academic Facts
 
-- 6 semesters or Molecular Biotechnology, dropped out. 
+- 6 semesters of Molecular Biotechnology, dropped out. 
 - Bachelor's in Psychology (LMU Munich)
 - Master's in Social/IO Psychology (LMU Munich)
 - Currently PhD Candidate at the Usable Security & Privacy Group at Leibniz University Hannover (Germany)
