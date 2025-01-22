@@ -1,3 +1,3 @@
 # Welcome!
 
-Hi! This is my blog. Me, that is Oliver D. Reithmaier. I'm a psychologist with a master's degree in social and I/O psychology and a PhD Candidate at the Usable Security and Privacy Group at the Leibniz University in Hannover, Germany. I write about things in Usable Security, Privacy, Research Methods, Politics and Statistics.
+Hi! You have reached the blog of Oliver D. Reithmaier (k4tana). While I do list my sources, my posts about science are mostly not covered in citations. There's a reason for this: Scientists deserve reasonable doubt. Even if I cite someone or something, it need not be true. It is up to you to verify what I'm saying holds up. 
