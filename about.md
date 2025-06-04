@@ -11,7 +11,7 @@ I'm Oliver D. Reithmaier, a half-brit German scientist in the usable security fi
 - Master's in Social/IO Psychology (LMU Munich)
 - Currently PhD Candidate at the Usable Security & Privacy Group at Leibniz University Hannover (Germany)
 
-My work focuses much around phishing emails, research methods and cybersecurity science concepts that stem from psychology (e.g. self-efficacy). Current research projects include: 
+My work focuses much around phishing emails, research methods and cybersecurity concepts that stem from psychology (e.g. self-efficacy). Current research projects include: 
 
 - Self-efficacy theory and knowledge in cybersecurity
 - Developing phishing detection ability tests with item response theory

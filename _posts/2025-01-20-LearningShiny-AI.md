@@ -38,7 +38,7 @@ For me, yes, definitely! Granted, this is an approach that is better suited for 
 **Who exactly is this approach good for, then?**
 If you're like me and need some sort of connection to your project or a goal you want to reach to stay motivated, this approach might be what you need.
 
-**Is this approach in any shape or form worth the energy**
+**Is this approach in any shape or form worth the energy?**
 Absolutely not. In fact, I would advise against it. ChatGPT 4.0 on average draws 0.3kWh per query. That's about 1000x the power draw of one google search. 
 
 Ultimately, this was a good experience for me, and although I will not use AI again to learn things, I value the thing I made with it. If you want to use ShinyExams for your exam evaluation or want to add to it, I'm open to feature and pull requests. Contact me on github (link below) if you find any bugs I can fix.  
