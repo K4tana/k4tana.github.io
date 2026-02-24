@@ -34,7 +34,9 @@ plugins:
 
 titles_from_headings:
   strip_title: true
-  collections: true
+  collections:
+    posts:
+      output: true
 
 defaults:
   - scope:
