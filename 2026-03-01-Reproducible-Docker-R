@@ -1,9 +1,0 @@
----
-layout: post
-title: Fully Computationally Reproducible R Workflows with Docker and renv (2026 Edition.)
-categories: blog
-tags: [R, docker, rocker, reproducibility, science, coding, renv, stats]
----
-Hey Friend, 
-
-you guessed right: I'm not the first one to write about this topic. And you're not wrong. 
