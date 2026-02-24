@@ -1,21 +1,8 @@
 ---
-title: Fully Computationally Reproducible R Workflows with Docker, pak and renv (2026
-  Edition)
+title: Fully Computationally Reproducible R Workflows with Docker, pak and renv (2026 Edition)
 layout: post
 categories: blog
-output:
-  html_document:
-    df_print: paged
-tags:
-- R
-- docker
-- rocker
-- reproducibility
-- science
-- coding
-- renv
-- stats
-- pak
+tags:[R, docker, rocker, reproducibility, science, coding, renv, statistics, pak]
 published: false
 ---
 Hey Friend, 
