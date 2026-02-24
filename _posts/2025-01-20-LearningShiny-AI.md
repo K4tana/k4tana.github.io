@@ -1,6 +1,6 @@
 ---
 layout: post
-title: I Learnt R-Shiny with AI so you don't have to (and built a neat little app in the process)
+title: "I Learnt R-Shiny with AI so you don't have to (and built a neat little app in the process)"
 categories: blog
 tags: [R, shiny, AI, chatgpt, LLM, app, statistics, exam]
 ---

@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Fully Computationally Reproducible R Workflows with Docker, pak and renv (2026 Edition)
+title: "Fully Computationally Reproducible R Workflows with Docker, pak and renv (2026 Edition)"
 categories: blog
-tags:[R, docker, reproducibility, renv, statistics]
+tags: [R, docker, reproducibility, renv, statistics]
 published: false
 ---
 Hey Friend, 
