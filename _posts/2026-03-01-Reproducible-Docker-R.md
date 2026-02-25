@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Fully Computationally Reproducible R Workflows with Docker, pak and renv (2026 Edition)"
+title: "Fully Computationally Reproducible R Workflows with Docker, `pak` and `renv` (2026 Edition)"
+preview: "Learn how to achieve it without losing your mind like I did."
 categories: blog
 tags: [R, docker, reproducibility, renv, statistics]
-published: false
 ---
 Hey Friend, 
 
-you guessed right: I'm not the first one to write about this topic. Others have done this before me. Many, others, in fact, like this one or [this one](https://raps-with-r.dev/repro_cont.html), [this one](https://huixinng.com/articles/intro-to-docker-for-reproducible-analyses-in-r), [this one](https://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/), [this one](https://rstudio.github.io/renv/articles/docker.html), [this one](https://medium.com/data-science/running-rstudio-inside-a-container-e9db5e809ff8), or, famously, [that one](https://eliocamp.github.io/codigo-r/en/2021/08/docker-renv/), which this post is kind of based on (thank you for laying the groundwork, Elio!). While being cool, all of them have one or more of the following issues: 
+in case you're thinking "I must have read something similar before", you guessed right: I'm not the first one to write about this topic. Others have done this before me. Many, others, in fact, like [this one](https://raps-with-r.dev/repro_cont.html), [this one](https://huixinng.com/articles/intro-to-docker-for-reproducible-analyses-in-r), [this one](https://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/), [this one](https://rstudio.github.io/renv/articles/docker.html), [this one](https://medium.com/data-science/running-rstudio-inside-a-container-e9db5e809ff8), or, famously, [that one](https://eliocamp.github.io/codigo-r/en/2021/08/docker-renv/), which this post is kind of based on (thank you for laying the groundwork, Elio!). While being cool, there's a few issues.
 
 - Some are old/outdated
 - Some are not made for already existing projects
@@ -21,21 +21,21 @@ In this blog post, I will show you how you can:
 
 1. Start your analysis pipeline with computational reproducibility in mind - from scratch!
 2. Translate your already existing analysis into a fully computationally reproducible product. 
-3. Use Docker and podman, two of the most useful tools in the modern computing environment to make stuff computationally reproducible.
-4. Circumvent pitfalls with all of the above. 
+3. Use Docker or podman, two of the most useful tools in the modern computing environment to make stuff computationally reproducible.
+4. Navigate pitfalls with all of the above. 
 5. Make your product as user-friendly as possible. 
 
 Big goals. But before that, a little bit of a disclaimer as to 1) who this blog is written for, 2) what it is we're doing and 3) why we are doing it. 
 
 #### Disclaimer 
-This blog is for people unfamiliar with docker, or people familiar with docker who never used rocker and tried to use it for reproducibility. This means, I will go a bit into operational details with docker and its prerequisites---something people familiar with the program might perceive as a bit too "goo goo gaga" for their taste. But this is fine. Just take what you need and leave the rest. 
-The technique I outline will enable your product to be fully computationally reproducible. If you're in science, you might know the "data available upon request" meme. It's something authors write in their paper when they want to pretend to be open and inclusive and all that, while either having lost their data, made it up in the first place, or milked it in unethical ways. Of course, sometimes they are just plain lazy---which I suspect is the broad majority. Regardless: With computational reproducibility, we can at least see how the authors got to the results they report in the article based on their data and code. Note that computational reproducibility is not the same as methodological reproducibility, or even integrity. All this blog post will tell you is to make your analysis reproducible for others. Not your setup, not your survey, just the analysis. Reproducibility does not mean your result isn't based on fraud, incompetence or misused analysis. So don't take this as an excuse to manipulate your way into a publication while claiming moral superiority because your fraud is reproducible. That is not how it works. But for now, back to the topic at hand.
+This blog is for people unfamiliar with docker, or people familiar with docker who never used rocker or tried to use it for reproducibility. This means, I will go a bit into operational details with docker and its prerequisites---something people familiar with the program might perceive as a bit too "goo goo gaga" for their taste. But this is fine. Just take what you need and leave the rest. 
+The technique I outline will enable your product to be fully computationally reproducible. If you're in science, you might know the "data available upon request" meme. It's something authors write in their paper when they want to pretend to be open and inclusive and all that, while either having lost their data, made it up in the first place, or milked it in unethical ways. Of course, sometimes they are just plain lazy---which I suspect is the broad majority. Regardless: With computational reproducibility, we can prevent that and at least see how the authors got to the results they report in the article based on their data and code. Computational reproducibility therefore mandates open data and code, but also means we need to make the result easily reproducible for anyone interested in doing so. This is what this post is about. Note that computational reproducibility is not the same as methodological reproducibility, or even integrity. All this blog post will tell you is to make your analysis reproducible for others. Not your experimental setup, not your survey, just the analysis. Reproducibility does not mean your result isn't based on fraud, incompetence or misused analysis. So don't take this as an excuse to manipulate your way into a publication while claiming moral superiority because your fraud is reproducible. That is not how it works. But for now, back to the topic at hand.
 
 #### Five things We Need To Get Going
 
 1. A bit of Linux knowledge (Linux users may skip this)
 
-    "Why Linux when I use $GARBAGE_OS for my analyses?", you might ask. Well, I will not judge you for liking garbage. Hell, I've lived off of garbage for a long time. But docker basically runs on Linux. You might have heard about Docker for Windows, but that runs on the Linux subsystem for Windows (WSL), not Windows itself. So here's everything you need to know about Linux to use docker. Linux runs basically on the command line, and with docker, it's best to get used to that. While Docker desktop exists, I consider it enshittified UI trash. I personally find dealing with the command line clearer and, frankly, easier. The command line lives in the terminal, in Windows that's the cmd or powershell thing. You click on it and type in commands. 
+    "Why Linux when I use $GARBAGE_OS for my analyses?", you might ask. Well, I will not judge you for liking garbage. Hell, I've lived off of garbage for a long time. But docker basically runs on Linux. You might have heard about Docker for Windows, but that runs on the Linux subsystem for Windows (WSL), not Windows itself. So here's everything you need to know about Linux to use docker. Linux runs basically on the command line, and with docker, it's best to get used to that. While Docker desktop exists, I consider it enshittified UI trash; personally, I find dealing with the command line clearer and, frankly, easier. The command line lives in the terminal, in Windows that's the cmd or powershell thing. You start it and type in commands. 
     The commands you need to know with docker are quite simple actually. There's `cd`, short for change directory. It takes a path after it as an argument, which is the destination where you want to go and sets your working directory of the command line to that folder. You can input any valid folder path into cd, it will take you there.
     
     ~~~~bash
@@ -43,14 +43,14 @@ The technique I outline will enable your product to be fully computationally rep
     cd home/documents/r-projects/mbess-project
     ~~~~
     
-    Another interesting command is [cp](https://www.geeksforgeeks.org/linux-unix/cp-command-linux-examples/). This literally means copy paste and takes two file paths as an argument: The origin and destination paths. Note that if the filename in the destination already exists, it is overwritten without asking. If there is no source file by that name, it is created without asking.  
+    Another interesting command is [cp](https://www.geeksforgeeks.org/linux-unix/cp-command-linux-examples/). This literally means copy paste and takes two file paths as an argument: The origin and destination paths. Note that if the filename in the destination already exists, it is overwritten without asking. If there is no source file by that name, it is created without asking (i.e. an empty file spawns at the destination).  
     
     ~~~~bash
     #This copies the file "text.txt" from documents to downloads
     cp home/documents/text.txt home/downloads/text.txt
     ~~~~
     
-    Then you might want to know about [ls](https://www.geeksforgeeks.org/linux-unix/ls-command-in-linux/). This command lists all files and folders in your current directory and gives you a broad overview what to get.
+    Then you might want to know about [ls](https://www.geeksforgeeks.org/linux-unix/ls-command-in-linux/). This command lists all files and folders in your current directory (or another specified directory) and gives you a broad overview what to get.
     
     ~~~~bash
     #gives all contents of the mbess-project folder
@@ -58,24 +58,27 @@ The technique I outline will enable your product to be fully computationally rep
     ls
     ~~~~
     
-    You can view files in the command line with `cat`. Note that this always assumes the current working directory that is shown in the command line prompt. 
+    You can view files in the command line with `cat`. You can also insert a path to a file that is not in your current working directory.  
     
     ~~~~bash
     #this prints the file contents to the command line
     cat filename.r
     ~~~~
     
-    *Installing Docker*
-    
-    You usually always need admin rights to install docker, this is true for any system if I remember correctly. This most likely means contacting your IT department if your IT is somewhat centralized and knows what it's doing, so keep this in mind. On Windows, the easiest way to install docker is through Docker Desktop (and then forget about docker desktop). On Mac you will need homebrew or something---you may google this, I am not a Mac user and do not intend to burden my brain with knowledge of that system.
-
-    Once installed, you immediately (and trust me, this is important) need to disable root needs. Docker usually needs admin privileges (called "root") to run, and you really don't want that. Firstly, because your admin may not trust you enough to execute random containers (maybe containing malware) with admin privileges, and also because it's a big nuisance to always enter admin credentials for docker to work. Consult [this](https://docs.docker.com/engine/security/rootless/) and ask your favourite IT person (which is definitely not me) to help you if you need it. Don't be shy, they will be glad to see you want to learn things.
 
 2. Docker/podman
 
     Docker and podman are container software. Containers are cool, because they are like virtual machines, just smaller and less intensive for your digital abacus. They can provide a backend running some operating system, and also provide pre-installed software that runs on that operating system. You can detach and attach them from your machine with one command. Isn't that handy?As an example, docker was used to deploy images for [*phishy mailbox*](https://github.com/Enterprize1/phishy-mailbox), a phishing research software Thorsten Thiel and I created. You plug it in and use it in the browser, no matter what your operating system behind the browser is. If you've ever been barred from using software because your system can't run it, think about how cool it is to not need to care about that.
     
-    Docker is the more seasoned version of the two, and is somewhat proprietary, but free to use for non-profit things or private persons---it also (still) scales better with really big applications and clusters than podman. Podman is a free and open source container software, which is becoming more and more popular among the community. It is highly compatible with docker and basically does most of the same things. I will focus on docker in this post, because I personally haven't dabbled with podman much so far, and don't feel too confident talking about it. But eventually, it is my goal to implement this approach fully with podman as well.Docker has a few basic commands we need to know for our workflow:
+    Docker is the more seasoned version of the two, and is somewhat proprietary, but free to use for non-profit things or private persons---it also (still) scales better with really big applications and clusters than podman. Podman is a free and open source container software, which is becoming more and more popular among the community. It is highly compatible with docker and basically does most of the same things. I will focus on docker in this post, because I personally haven't dabbled with podman much so far, and don't feel too confident talking about it. But eventually, it is my goal to implement this approach fully with podman as well.
+    
+     *Installing Docker*
+    
+    You usually always need admin rights to install docker, this is true for any system if I remember correctly. This most likely means contacting your IT department if your IT is somewhat centralized and knows what it's doing, so keep this in mind. On Windows, the easiest way to install docker is through Docker Desktop (and then forget about docker desktop). On Mac you will need homebrew or something---you may google this, I am not a Mac user and do not intend to burden my brain with knowledge of that system.
+
+    Once installed, you immediately (and trust me, this is important) need to disable root needs. Docker usually needs admin privileges (called "root") to run, and you really don't want that. Firstly, because your admin may not trust you enough to execute random containers (possibly containing malware) with admin privileges, and also because it's a big nuisance to always enter admin credentials for docker to work. Consult [this](https://docs.docker.com/engine/security/rootless/) and ask your favourite IT person (which is definitely not me) to help you if you need it. Don't be shy, they will be glad to see you want to learn things.
+    
+    Docker has a few basic commands we need to know for our workflow:
     
     - pull: Gets us docker images from the web onto our machine.
     - builder prune: clears building cache.
@@ -86,11 +89,11 @@ The technique I outline will enable your product to be fully computationally rep
 
 3. Rocker
 
-    [Rocker](https://rocker-project.org/) is a family of pre-configured docker images. The base version comes with r installed, but there are also versions with Rstudio (server) and the tidyverse pre-installed. This is highly useful, because it gives us a head-start in our endeavour. 
+    [Rocker](https://rocker-project.org/) is a family of pre-configured docker images. The base version comes with r installed, but there are also versions with Rstudio (server) and the tidyverse pre-installed. This is highly useful, because it gives us a head start in our endeavour. 
 
 4. `renv`
 
-    renv is an R-package that will install your used libraries into your current project folder and keep them stable. This means, you have a static version for your libraries, and will not cause dependency or downward compatibility problems with your code down the line if they happen to update on your system at some point. This also ensures computational reproducibility in our docker case.
+    renv is an R-package that will install your used libraries into your current project folder and lock their version. This means, you have a static version for your libraries, and will not cause dependency or downward compatibility problems with your code down the line if they happen to update on your system at some point. This also ensures computational reproducibility in our docker case.
 
 5. `pak`
     
@@ -121,17 +124,18 @@ This comes in handy when we will use pak in a bit. For now, the dependencies com
 
 #### Determining System Dependencies with `pak`
 
-Remember that I said docker runs on Linux? Well, some packages require a certain help from the outside of R to work. Thankfully, `pak` helps us with this. We install it from CRAN and call the `pak::pkg_sysreqs()` function, which we can use with our pkg object. This will give us all the system dependencies as well as a command to install them in the docker image. Save this somewhere, we will need it. As an example, below is the code for a project using only base R and the `MBESS` library. remember that for your project to work properly, always include "renv" into your package vector, and the `pkg_sysreqs()` command.  
+Remember that I said docker runs on Linux? Well, some packages require a certain help from the outside of R to work. Thankfully, `pak` helps us with this. We install it from CRAN and call the `pak::pkg_sysreqs()` function, which we can use with our pkg object. This will give us all the system dependencies as well as a command to install them in the docker image. Save this somewhere, we will need it. As an example, below is the code for a project using only base R and the `MBESS` library. Remember that for renv to work properly, always include "renv" and "curl" into your package vector, and the `pkg_sysreqs()` command.  
 
 ~~~~r
-pak::pkg_sysreqs(c("MBESS"), sysreqs_platform = "ubuntu-20.04")
+pak::pkg_sysreqs(c("MBESS", "renv", "curl"), sysreqs_platform = "ubuntu-20.04")
 
 #Output:
-# ── Install scripts ──────────────────────────────────────────── Ubuntu 20.04 ─
+# ── Install scripts ───────────────────────────────────────────────────────────────────────────── Ubuntu 20.04 ──
 # apt-get -y update
-# apt-get -y install make cmake pandoc
+# apt-get -y install make cmake pandoc libcurl4-openssl-dev libssl-dev
 # 
-# ── Packages and their system dependencies ────────────────────────────────────────────────────────────────
+# ── Packages and their system dependencies ──────────────────────────────────────────────────────────────────────
+# curl         – libcurl4-openssl-dev, libssl-dev
 # minqa        – make
 # nloptr       – cmake
 # OpenMx       – make
@@ -155,7 +159,7 @@ LABEL maintainer="email@email.com"
 
 ## Install system dependencies
 RUN sudo apt-get update
-RUN sudo apt-get -y install make cmake pandoc
+RUN apt-get -y install make cmake pandoc libcurl4-openssl-dev libssl-dev
 
 WORKDIR /etc/rstudio
 #copy rstudio initial instructions to override defaults
@@ -192,19 +196,19 @@ The label is just an info for people who might need support or have questions to
 ~~~~dockerfile
 ## Install system dependencies
 RUN sudo apt-get update
-RUN sudo apt-get -y install make cmake pandoc
+RUN sudo apt-get -y install make cmake pandoc libcurl4-openssl-dev libssl-dev
 ~~~~
 
-Remember the install command we got from pak? This is where we need it, because without it, our renv code won't run. In our little mini project using MBESS we had `apt-get -y install make cmake pandoc`, so that is what we'll use. The "sudo " part tells linux to use admin rights to install the thing. It is usually not necessary, as you already have admin privileges for rocker building, but just in case, we will use it here (it is technically considered bad style in dockerfiles, but sometimes one runs into issues, so I will keep it). The update command ensures that our system can find the necessary packages to install.
+Remember the install command we got from pak? This is where we need it, because without it, our renv code won't run. In our little mini project using MBESS we had `apt-get -y install make cmake pandoc libcurl4-openssl-dev libssl-dev`, so that is what we'll use. The "sudo " part tells linux to use admin rights to install the thing. It is usually not necessary, as you already have admin privileges for rocker building, but just in case, we will use it here (it is technically considered bad style in dockerfiles, but sometimes one runs into issues, so I will keep it). The update command ensures that our system can find the necessary packages to install.
 
-The next step ensures that Rstudio starts up loaded in our project directory so all we have to do is click on a file and source it. For this, we need to give RStudio a pointer to a default folder to load into---this is never set automatically. Digging though the documentation got me [here](https://docs.posit.co/ide/server-pro/rstudio_server_configuration/rsession_conf.html), showing which parameter we need to change. We then make up a new `rsession.conf` file in a text editor with the following content:
+The next step ensures that Rstudio server in the image starts up loaded in our project directory so all we have to do is click on a file and source it. For this, we need to give RStudio a pointer to a default folder to load into---this is never set automatically. Digging though the documentation got me [here](https://docs.posit.co/ide/server-pro/rstudio_server_configuration/rsession_conf.html), showing which parameter we need to change. We then make up a new `rsession.conf` file in a text editor with the following content:
 
-~~~~
+~~~~bash
 # R Session Configuration File
 session-default-working-dir=/home/rstudio/mbess-project
 ~~~~
 
-This tells RStudio to open new sessions always in the mbess-project folder. Obviously, you can rename the folder to whatever you want, just be consistent with the naming in the dockerfile. Save it into your R folder that contains the dockerfile. 
+This tells RStudio to open new sessions always in the mbess-project folder. Obviously, we can rename the folder to whatever we want, we just need to be consistent with the naming in the dockerfile. We save it into your R folder that contains the dockerfile. 
 
 ~~~~dockerfile
 WORKDIR /etc/rstudio
@@ -228,7 +232,7 @@ COPY data data
 COPY README.txt README.txt
 COPY analysis.r analysis.r
 ~~~~
-We then switch the docker working directory to our mbess-project again---if it does not exist, docker will create it, so we won't worry too much about that. We proceed to copy the local data folder, analysis file and a the README file from our local machine (left) to the docker image (right). If there is other stuff necessary to copy, we could also just insert file paths. I personally just find it easier to do it from one folder, especially since I have an easier time curating my data beforehand. 
+We then switch the docker working directory to our mbess-project again---if it does not exist, docker will create it, so we won't worry too much about that. We proceed to copy the local data folder, analysis file and a the README file from our local machine (left) to the docker image (right). If there is other stuff necessary to copy, we could also just insert file paths. I personally just find it easier to do it from one folder, especially since I have an easier time curating my data and scripts beforehand. 
 
 ~~~~dockerfile
 # Copy R environment and restore packages
@@ -239,7 +243,7 @@ RUN R -e "setwd('/home/rstudio/project-name');renv::restore()"
 
 The last part of the code is the most critical. This will copy all the `renv`-relevant files and folders, then run r, set the R working directory to your project and call the `renv::restore()` function. This may take a while, because this installs all your specified packages and their dependencies into the project folder, with versions identical to ours. This often means that we need to compile those packages from source, i.e. we can't just "install" them in the regular fashion, but need to build their installed versions from scratch code, which takes a while. Granted, most packages will build in less than 30 seconds, but some may take minutes; as an example, OpenMx is one of the nastiest ones...if you run SEM-code, expect some significant building time. 
 
-But once this is done, the building process is basically over. And that all was directed by the Dockerfile we wrote. 
+This is about it. Docker does not need to know more. Commence the building!
 
 #### Building the Image
 
@@ -249,7 +253,8 @@ This is a rather simple process. We switch to the command line and, if we set up
 cd home/r-projects/mbess-project
 docker build . -t k4tana/mbess-image
 ~~~~
-Docker will tell us if it runs into issues. Mostly, it will just be small typos in file names in the dockerfile or things of this matter. Sometimes, the build will fail to install packages due to missing system dependencies. In that case, we need to check  `renv::dependencies()` again, sometimes a package might have gone unnoticed by `renv`.
+
+Note that naming convention in images is "creator/image-name". As creator, you can just use your dockerhub/github handle, or whatever fits. Docker will tell us if it runs into issues during building. Mostly, it will just be small typos in file names in the dockerfile or things of this matter. Sometimes, the build will fail to install packages due to missing system dependencies. In that case, we need to check  `renv::dependencies()` again, sometimes a package might have gone unnoticed by `renv`.
 
 #### Testing the Image 
 
@@ -261,11 +266,11 @@ docker run --rm -p 8787:8787 -e DISABLE_AUTH=true -v /home/rstudio/mbess-project
 
 This tells docker to run our image (k4tana/mbess-image) on port 8787 in ephemeral mode (--rm), meaning all the things we do with the image while we run it will not be saved within the image, so that it starts up fresh next time. It also disables authentication so we don't have to type in login or anything---we are doing open science and have no secrets, right? It also tells us which folder/volume we would like to mount within RStudio-server (-v). 
 
-After this, we simply switch to the browser of our choice, type in localhost:8787 and watch RStudio Server start up in the browser, ready with the code and data. It is highly recommended to run it once fully to verify it works. Sometimes, there are issues with parallelization and memory allocation, which need fixing.
+After this, we simply switch to the browser of our choice, type localhost:8787 into the address bar and watch RStudio Server start up in the browser, ready with the code and data. It is highly recommended to run all scripts once fully to verify they work. Sometimes there are issues with parallelization and memory allocation, which need fixing.
 
 #### Publishing the Image
 
-Once all runs and works, we can publish our image. The easiest way is to push it to dockerhub. For this, we create an account there if we don't have one already. We then authenticate via the command line with `docker login` and follow the instructions we are given. Finally, we can push the image to dockerhub with `docker push k4tana/mbess-project`. If it complains about a missing repository, there might be a need to create one on the dockerhub website prior to pushing. 
+Once all runs and works, we can publish our image. The easiest way is to push it to dockerhub. For this, we create an account there if we don't have one already. We then authenticate via the command line with `docker login` and follow the instructions we are given. Finally, we can push the image to dockerhub with `docker push k4tana/mbess-project`. If it complains about a missing repository, there might be a need to create one on the dockerhub website prior to pushing. In this context, it is good to know that renaming images is easily possible with `docker image tag old/name new/name`.
 
 Again, we test our image by pulling it with `docker pull k4tana/mbess-project`, to our machine and also a different one, preferably with a different OS to see whether it works. If it works and executes, we are officially done and can pat ourselves on the back (shoulder mobility!), as we have finally made our project computationally reproducible.
 
@@ -275,7 +280,7 @@ Again, we test our image by pulling it with `docker pull k4tana/mbess-project`, 
 
 Should your project fail to build, you can build again after improvement of the dockerfile, with low penalties. Usually, docker caches (saves) your process until it breaks, so you don't have to repeat anything until the first command that was changed. If you want to build from scratch, you may clear your cache with `docker builder prune --all` and then confirm.
 
-If you built an image that contains an error, you can delete it using `docker rmi image-name` and build anew.
+If you built an image that contains an error, you can delete it using `docker rmi imagename` and build anew.
 
 **Rocker Ubuntu Version**
 
@@ -295,7 +300,7 @@ If you are running a docker container but want it to stop to save resources, the
 
 ### Final Recommendations
 
-I hope you got a glimpse into the process of using Docker and R to make your projects computationally reproducible. Granted, it is not the *technically* best approach---I believe what Bruno Rodrigues has done with NixOS and Rix is superior in terms of streamlined reproducibility. Yet, I fear that his approach is too technical for many scientists whose skills are better used in the lab or interviewing people rather than learning a new operating system just to get their papers out. Docker is, in my opinion, a good compromise because it is easy to learn to get the job done, works on any system and is free to use. With the advent of podman and its continued development, we will also see a completely FOSS version taking the reign soon. While some argue that Docker is an added dependency for projects, I argue that sometimes a dependency is worth it, if it makes a process more usable for most people involved. 
+I hope you got a glimpse into the process of using Docker and R to make your projects computationally reproducible. Granted, it is not the *technically* best approach---I believe what Bruno Rodrigues has done with NixOS and Rix is superior in terms of streamlined reproducibility. Yet, I fear that his approach is too technical for many scientists whose skills are better used in the lab or interviewing people rather than learning a new operating system just to get their papers out. Docker is, in my opinion, a good compromise because it is easy to learn to get the job done, works on any system and is free to use. With the advent of podman and its continued development, we will also see a completely FOSS version possibly taking the reigns soon. While some argue that Docker is an added dependency for projects, I argue that sometimes a dependency is worth it, if it makes a process more usable for most people involved. 
 
 Let me know where you stand on the matter, whether you found this helpful, or if there is anything I could clarify. 
 

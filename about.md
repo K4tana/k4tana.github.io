@@ -2,7 +2,7 @@
 layout: page
 title: About Me
 ---
-I'm Oliver D. Reithmaier, a half-brit German scientist in the usable security field. I speak English, German, (bad) Japanese and can read Dutch (dont ask me to speak, please). 
+I'm Oliver D. Reithmaier, a British/German scientist in the usable security field. I speak English, German, (bad) Japanese and can read Dutch (dont ask me to speak, please). 
 
 ### Academic Facts
 
@@ -13,9 +13,9 @@ I'm Oliver D. Reithmaier, a half-brit German scientist in the usable security fi
 
 My work focuses much around phishing emails, research methods and cybersecurity concepts that stem from psychology (e.g. self-efficacy). Current research projects include: 
 
-- Self-efficacy theory and knowledge in cybersecurity
-- Developing phishing detection ability tests with item response theory
-- Further development of the PhishyMailbox toolkit
+- Self-efficacy and knowledge in cybersecurity
+- Developing software and measurement for usable security science.
+- Usability of authentication technology
 
 ### Other facts
 
