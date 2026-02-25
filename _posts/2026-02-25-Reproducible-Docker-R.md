@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Fully Computationally Reproducible R Workflows with Docker, `pak` and `renv` (2026 Edition)"
+title: "Fully Computationally Reproducible R Workflows with Docker, pak and renv (2026 Edition)"
 preview: "Learn how to achieve it without losing your mind like I did."
 categories: blog
 tags: [R, docker, reproducibility, renv, statistics]
@@ -86,6 +86,7 @@ The technique I outline will enable your product to be fully computationally rep
     - rmi: removes built or pulled images. 
     - login/logout: used to make our images public.
     - push: this command pushes your docker image to a container registry like docker hub, github (ghcr) or codeberg(forgejo).
+
 
 3. Rocker
 
